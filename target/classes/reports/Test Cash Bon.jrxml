@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Test Cash Bon" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cb15c210-ebbf-41ea-894a-7902f9034f64">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Troll Market"/>
+	<parameter name="date" class="java.time.LocalDate"/>
+	<parameter name="dateEnd" class="java.time.LocalDate"/>
+	<queryString language="SQL">
+		<![CDATA[select * from TransactionTroll as tra
+left outer join Account as acc on tra.BuyerUsername = acc.Username
+left outer join Merchandise as mer on tra.MerchandiseId = mer.Id
+left outer join Account as accSeller on mer.SellerUsername = accSeller.Username
+where tra.PurchaseDate between $P{date} and $P{dateEnd}]]>
+	</queryString>
+	<field name="BuyerUsername" class="java.lang.String"/>
+	<field name="FirstName" class="java.lang.String"/>
+	<field name="LastName" class="java.lang.String"/>
+	<field name="Quantity" class="java.lang.Integer"/>
+	<field name="Price" class="java.math.BigDecimal"/>
+	<field name="MerchandiseName" class="java.lang.String"/>
+	<variable name="TOTAL_BARANG" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{Price}.multiply(BigDecimal.valueOf($F{Quantity}))]]></variableExpression>
+	</variable>
+	<group name="Group1">
+		<groupHeader>
+			<band height="37">
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="0" width="40" height="32" forecolor="#666666" backcolor="#E6E6E6" uuid="4fcbdb62-0bde-4500-811e-41922c98fcfc"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[QTY]]></text>
+				</staticText>
+				<line>
+					<reportElement x="-20" y="32" width="595" height="1" forecolor="#666666" uuid="be62702f-69e9-432d-9ac6-986e06938af6"/>
+				</line>
+				<staticText>
+					<reportElement mode="Opaque" x="40" y="0" width="240" height="32" forecolor="#666666" backcolor="#E6E6E6" uuid="eb71adbd-5917-47d5-8586-d359bc11340f"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[NAMA BARANG]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="280" y="0" width="130" height="32" forecolor="#666666" backcolor="#E6E6E6" uuid="f545d6c2-cf70-4621-96ed-d9d6738beb68"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[Harga Satuan]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="410" y="0" width="144" height="32" forecolor="#666666" backcolor="#E6E6E6" uuid="2a1332c9-7d39-435e-a4b3-ef82eaa28c63"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[JUMLAH]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="Group2">
+		<groupFooter>
+			<band height="51">
+				<textField>
+					<reportElement x="410" y="0" width="145" height="30" uuid="3ed9dd3c-7f37-4d90-bae4-35444bea2451"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[NumberFormat.getCurrencyInstance(new Locale("id", "ID")).format($V{TOTAL_BARANG}.doubleValue())]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="72">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#006699" uuid="4ab587d1-426d-4e11-b7e0-f27148e35e95"/>
+				<staticText>
+					<reportElement x="20" y="20" width="340" height="43" forecolor="#FFFFFF" uuid="8e38c8a4-0fd3-4e77-a256-d14d04b2d8bf"/>
+					<textElement>
+						<font size="34" isBold="true"/>
+					</textElement>
+					<text><![CDATA[CITRA SAUDARA]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="400" y="12" width="174" height="18" forecolor="#FFFFFF" uuid="513b9d69-1265-4096-9c5f-002943475f6d"/>
+					<textElement textAlignment="Justified"/>
+					<textFieldExpression><![CDATA["Depok, " + new SimpleDateFormat("dd MMMM yyyy").format(new java.util.Date())]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="399" y="31" width="176" height="20" forecolor="#FFFFFF" uuid="7609eaa9-9509-4359-9f14-2e5c1defb0f9"/>
+					<textElement textAlignment="Center"/>
+					<text><![CDATA[Kepada Yth.]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="400" y="51" width="174" height="18" forecolor="#FFFFFF" uuid="a5f12506-fda3-4093-aa5c-8082890e59df"/>
+					<textElement textAlignment="Left"/>
+					<textFieldExpression><![CDATA["Tuan " + $F{FirstName} + " " + $F{LastName}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="13"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="21">
+			<line>
+				<reportElement x="-20" y="20" width="595" height="1" forecolor="#666666" uuid="8cee5d6b-1c79-45f4-854d-8bdecf64191f"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="35">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField>
+				<reportElement x="0" y="0" width="40" height="30" uuid="82b2ea76-b6e0-4cd3-82c6-edb93eb572ce"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Quantity}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="40" y="0" width="240" height="30" uuid="a40e53ac-b4c8-41d3-8238-252bc2edb36d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{MerchandiseName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="0" width="130" height="30" uuid="14f3d59c-58c7-4f55-ad82-638d9cc5c144"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[NumberFormat.getCurrencyInstance(new Locale("id", "ID")).format($F{Price}.doubleValue())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="" x="410" y="0" width="144" height="30" uuid="5dff1975-99d3-448f-b82a-beaaf492385d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[NumberFormat.getCurrencyInstance(new Locale("id", "ID")).format($F{Price}.multiply(BigDecimal.valueOf($F{Quantity})).doubleValue())]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="7d70ad05-3902-4473-8ffa-cd6716e2f340"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="cd0225d1-ee49-4b09-8f93-bc50ca676a67"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="4" width="100" height="13" uuid="0b090341-04e7-4dcd-b36d-9ef2f55b58a3"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>
